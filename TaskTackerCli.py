@@ -46,7 +46,7 @@ def add(task_description, task_status):
     }
     tasks.append(task)
     save_tasks(tasks)
-    print("Task added:", task)
+    print("Task added:", task, "\n")
 
 
 def update(task_id, new_description=None, new_status=None):
@@ -62,9 +62,9 @@ def update(task_id, new_description=None, new_status=None):
                 task["Status"] = new_status
             task["Updated At"] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
             save_tasks(tasks)
-            print("Task updated:", task)
+            print("Task updated:\n", task)
             return
-    print(f"Task with ID {task_id} not found.")
+    print(f"Task with ID {task_id} not found.\n")
 
 
 def delete(task_id):
@@ -74,7 +74,7 @@ def delete(task_id):
         print(f"Task with ID {task_id} not found.")
     
     save_tasks(new_tasks)
-    print(f"Task with ID {task_id} deleted.")
+    print(f"Task with ID {task_id} deleted.\n")
     
 
 
@@ -95,8 +95,37 @@ def main_loop():
             if not tasks:
                 print("No tasks found.")
             else:
-                for task in tasks:
-                    print_task(task)
+                userInput = input("Enter status to filter by (or press Enter to list all): ")
+                if userInput == "done":
+                    doneTasks = [task for task in tasks if task.get("Status") == "done"]
+                    print("Done Tasks:\n")
+                    print("-"*40)
+                    for task in doneTasks:
+                        for k, v in task.items():
+                            print(f"{k}: {v}")
+                        print("-"*40)   
+                        
+                elif userInput == "inprogress":
+                    inprogressTasks = [task for task in tasks if task.get("Status") == "inprogress"]
+                    print("In Progress Tasks:\n")
+                    print("-"*40)
+                    for task in inprogressTasks:
+                        for k, v in task.items():
+                            print(f"{k}: {v}")
+                        print("-"*40)
+
+                elif userInput == "todo":
+                    todoTasks  = [task for task in tasks if task.get("Status") == "todo"]
+                    print("Todo Tasks:\n")
+                    print("-"*40)
+                    for task in todoTasks:
+                        for k, v in task.items():
+                            print(f"{k}: {v}")
+                        print("-"*40)
+
+                else:
+                    for task in tasks:
+                        print_task(task)
 
         elif userInput == "add":
             task_description = input("Enter task description: ")
